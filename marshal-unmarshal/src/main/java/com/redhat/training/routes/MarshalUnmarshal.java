@@ -33,6 +33,12 @@ public class MarshalUnmarshal extends RouteBuilder {
             // .unmarshal(ticketXml)
             // .unmarshal().json(Ticket.class)
             .to("log:processedMessage")
+            /* Filtering: you do JSONPath and XPath before unmarshaling.
+               Move these lines above, before unmarshal(), if testing.
+            */
+            // .filter().jsonpath(".email == 'johndoe@example.com'")
+            // .filter().xpath("/ticket/priority/text() = 'URGENT'")
+            .filter().simple("${body.priority} == 'URGENT'")
             // .marshal(ticketCsv)
             // .marshal(ticketXml)
             .marshal().json()
