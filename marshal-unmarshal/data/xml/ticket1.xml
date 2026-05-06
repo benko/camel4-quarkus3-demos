@@ -1,0 +1,8 @@
+<ticket>
+  <timestamp>2026-05-06T09:16:00</timestamp>
+  <reporter>johndoe@example.com</reporter>
+  <priority>URGENT</priority>
+  <message>
+    My internet connection is having issues. Can you help me?
+  </message>
+</ticket>
