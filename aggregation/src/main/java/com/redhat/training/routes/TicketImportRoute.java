@@ -21,7 +21,12 @@ public class TicketImportRoute extends RouteBuilder {
         from("file:data/in/?fileName=tickets.csv&noop=true")
             .unmarshal(ticketsCsv)
             .to("log:LoadedData")
+            // Uses the consumer thread pool
             .split().body()
+            /* Use current thread pool to parallelize processing of split exchanges. */
+            // .parallelProcessing()
+            /* Use a new thread pool to parallelize processing of split exchanges. */
+            // .threads(15).maxQueueSize(100)
             .log("SPLIT: ${body}")
             .filter().simple("${body.priority} in 'URGENT,HIGH'")
             .log("FILTERED: ${body}")
