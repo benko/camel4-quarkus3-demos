@@ -2,4 +2,4 @@ target/
 .vscode
 .*.sw?
 **/data/out/*.*
-**/data/tickets/*.*
+**/data/tickets/*
