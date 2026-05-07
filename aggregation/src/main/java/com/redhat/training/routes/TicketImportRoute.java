@@ -28,29 +28,34 @@ public class TicketImportRoute extends RouteBuilder {
             .convertBodyTo(ActionItem.class)
             .bean(AssignActionItem.class)
             .log("${body.username} assigned to ${body.assignee}...")
+            // Correlation key is the assignee of the ActionItem - group
+            // ActionItems by whoever is responsible for them.
             .aggregate(simple("${body.assignee}"),
-                        (oldAI, newAI) -> {
+                        // Lambda for AggregationStrategy. Could be a separate class.
+                        (oldEx, newEx) -> {
                             List<ActionItem> actionItems;
                             Message m;
                             // Initialize the list if this is the start of a new group.
-                            if (oldAI == null) {
+                            if (oldEx == null) {
                                 actionItems = new ArrayList<>();
-                                m = newAI.getMessage().copy();
+                                // This is just to get the headers and other meta.
+                                // The body will be replaced below.
+                                m = newEx.getMessage().copy();
                             } else {
-                                actionItems = oldAI.getIn().getBody(List.class);
-                                m = oldAI.getMessage().copy();
+                                actionItems = oldEx.getIn().getBody(List.class);
+                                m = oldEx.getMessage().copy();
                             }
                             // Add the current action item to the group (engineer).
-                            actionItems.add(newAI.getIn().getBody(ActionItem.class));
+                            actionItems.add(newEx.getIn().getBody(ActionItem.class));
                             // Store the list as a new message and return the exchange.
                             m.setBody(actionItems);
                             m.setHeader("CamelFileName",
-                                        newAI.getIn().getBody(ActionItem.class).getAssignee()
+                                        newEx.getIn().getBody(ActionItem.class).getAssignee()
                                                         .toLowerCase()
                                                         .replace(' ', '-')
                                                         + ".json");
-                            newAI.setMessage(m);
-                            return newAI;
+                            newEx.setMessage(m);
+                            return newEx;
                         })
                 .completionTimeout(5000)
             .log("Aggregation completed for ${header.CamelFileName}...")
