@@ -29,7 +29,7 @@ public class DynamicRouting extends RouteBuilder {
             /* Routing Slip */
             // .process(new TicketPriorityProcessingSequence())
             // .routingSlip().header("processing-sequence")
-            /* Dynamic Router - NOTE: This deliberately creates an endless loop. */
+            /* Dynamic Router - in both messages we only call twice (second time completes). */
             // .dynamicRouter().method(DynamicRouterDecision.class)
             /* Dynamic Endpoint - NOTE: This will block unless there is a consumer on direct:high. */
             // .setHeader("foo", simple("direct:${body.priority.toString().toLowerCase()}"))

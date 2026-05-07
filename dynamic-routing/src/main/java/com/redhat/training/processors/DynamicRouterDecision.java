@@ -17,6 +17,8 @@ public class DynamicRouterDecision {
             return null;
         }
 
+        t.setProcessed(true);
+
         if (t.getReporter().equals("johndoe@example.com")) {
             LOG.info("Got a ticket from John Doe, this requires special care.");
             return "log:SpecialCare";
