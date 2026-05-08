@@ -16,7 +16,7 @@ public class RestRouteBuilder extends RouteBuilder {
         /* Send a POST request to this endpoint using curl:
             curl -v -H "Content-Type: application/json" \
                  -XPOST -d @./data/input/sample-ticket.json \
-                 http://localhost:8081/tickets
+                 http://localhost:8081/api/v1/tickets
         */
         rest("/api/v1")
             .post("/tickets")
