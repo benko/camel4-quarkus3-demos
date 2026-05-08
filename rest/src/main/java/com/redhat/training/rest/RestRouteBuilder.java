@@ -10,6 +10,7 @@ public class RestRouteBuilder extends RouteBuilder {
         restConfiguration()
             // Binding mode is for PRODUCER ONLY.
             .bindingMode(RestBindingMode.off)
+            .producerComponent("http")
             .dataFormatProperty("prettyPrint", "true");
 
         /* Send a POST request to this endpoint using curl:
@@ -17,10 +18,19 @@ public class RestRouteBuilder extends RouteBuilder {
                  -XPOST -d @./data/input/sample-ticket.json \
                  http://localhost:8081/tickets
         */
-        rest("/tickets")
-            .post()
+        rest("/api/v1")
+            .post("/tickets")
+                .routeId("createActionItem")
                 .consumes("application/json")
                 .produces("application/json")
-                .to("direct:createTicket");
+                .to("direct:createActionItem")
+            .get("/actionItems")
+                .routeId("listActionItems")
+                .produces("application/json")
+                .to("direct:listActionItems")
+            .get("/customers/{username}")
+                .routeId("getCustomerData")
+                .produces("application/json")
+                .to("direct:getCustomerData");
     }
 }

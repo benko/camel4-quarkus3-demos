@@ -44,7 +44,7 @@ public class Ticket implements Serializable {
         return message;
     }
     public void setMessage(String message) {
-        this.message = message;
+        this.message = message.trim();
     }
     public boolean isProcessed() {
         return processed;
