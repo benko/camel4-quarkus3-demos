@@ -62,7 +62,7 @@ public class TicketImportRoute extends RouteBuilder {
                             newEx.setMessage(m);
                             return newEx;
                         })
-                .completionTimeout(5000)
+                .completionTimeout(1500)
             .log("Aggregation completed for ${header.CamelFileName}...")
             .marshal().json()
             .to("file:data/out/?fileExist=Override");
